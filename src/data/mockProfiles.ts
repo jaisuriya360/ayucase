@@ -1,0 +1,68 @@
+import type { DemoProfile } from '../types/auth'
+
+export const DEMO_PATIENT_PROFILES: DemoProfile[] = [
+  {
+    id: 'demo-pt-1',
+    name: 'Aarav Chen',
+    role: 'patient',
+    roleTitle: 'Adult Health Journey',
+    fictionalIdentifier: 'PT-DEMO-9042',
+    email: 'aarav.demo@ayucase.local',
+    badgeText: 'Active Case CS-1082',
+    avatarColor: 'bg-emerald-500',
+    description: '38y male, managing recurrent autonomic migraines and lifestyle telemetry.',
+    age: 38,
+    gender: 'Male',
+  },
+  {
+    id: 'demo-pt-2',
+    name: 'Meenakshi Sundaram',
+    role: 'patient',
+    roleTitle: 'Senior Care Journey',
+    fictionalIdentifier: 'PT-DEMO-7119',
+    email: 'meenakshi.demo@ayucase.local',
+    badgeText: 'Elder Mode Recommended',
+    avatarColor: 'bg-indigo-500',
+    description: '68y female, osteoarthritis and hypertension monitoring. Prefers simplified high-contrast view.',
+    age: 68,
+    gender: 'Female',
+  },
+  {
+    id: 'demo-pt-3',
+    name: 'Rajesh Patel',
+    role: 'patient',
+    roleTitle: 'Cardiac Wellness',
+    fictionalIdentifier: 'PT-DEMO-3381',
+    email: 'rajesh.demo@ayucase.local',
+    badgeText: 'Post-Op Follow-up',
+    avatarColor: 'bg-teal-500',
+    description: '52y male, cardiac rehabilitation tracking with wearable device data.',
+    age: 52,
+    gender: 'Male',
+  },
+]
+
+export const DEMO_PHYSICIAN_PROFILES: DemoProfile[] = [
+  {
+    id: 'demo-md-1',
+    name: 'Dr. Elena Vance, MD',
+    role: 'physician',
+    roleTitle: 'Chief Neurologist & Integrative Medicine',
+    fictionalIdentifier: 'MD-LIC-4412',
+    email: 'elena.vance@ayucare.clinic',
+    badgeText: 'Neuro & Integrative',
+    avatarColor: 'bg-cyan-600',
+    description: 'Lead clinical investigator for chronic pain phenotypes and symptom trajectory mapping.',
+  },
+  {
+    id: 'demo-md-2',
+    name: 'Dr. Ramesh K., MD, FRCP',
+    role: 'physician',
+    roleTitle: 'Senior Consultant Physician',
+    fictionalIdentifier: 'MD-LIC-1089',
+    email: 'ramesh.k@ayucare.clinic',
+    badgeText: 'General Medicine & Triage',
+    avatarColor: 'bg-violet-600',
+    description: 'Specializes in multi-morbidity longitudinal care and clinical AI-assisted synthesis.',
+  },
+]

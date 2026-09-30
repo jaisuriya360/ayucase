@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyuCase — Complete User Manual & Feature Guide</title>
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --primary-light: #ecfdf5;
+      --secondary: #0891b2;
+      --accent: #6366f1;
+      --dark: #0f172a;
+      --slate-800: #1e293b;
+      --slate-600: #475569;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --amber: #d97706;
+      --red: #dc2626;
+      --radius: 12px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--dark);
+      background-color: #ffffff;
+      line-height: 1.65;
+      padding: 40px;
+      font-size: 14.5px;
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm 15mm 20mm 15mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        font-size: 13px;
+        line-height: 1.5;
+        background: white;
+      }
+      .page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+      .no-break {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .header-cover {
+        padding-top: 50px;
+        padding-bottom: 50px;
+      }
+      .badge-demo {
+        box-shadow: none !important;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Cover / Header Hero */
+    .header-cover {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 40%, #0e7490 100%);
+      color: white;
+      padding: 48px;
+      border-radius: var(--radius);
+      margin-bottom: 40px;
+      box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.25);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    h1.title {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+      max-width: 720px;
+      line-height: 1.5;
+    }
+
+    .meta-bar {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    /* Table of Contents */
+    .toc-card {
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+
+    .toc-card h2 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--slate-800);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 6px;
+      display: inline-block;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px 24px;
+    }
+
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      color: var(--slate-600);
+      text-decoration: none;
+      font-size: 13.5px;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 4px;
+    }
+
+    .toc-item span:first-child {
+      color: var(--slate-800);
+    }
+
+    /* Section Styling */
+    h2.section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--slate-800);
+      margin-top: 36px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 5px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h3.subsection-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: #334155;
+    }
+
+    ul, ol {
+      margin-bottom: 16px;
+      padding-left: 22px;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .feature-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--slate-800);
+    }
+
+    .feature-route {
+      font-family: monospace;
+      font-size: 12px;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: var(--secondary);
+      font-weight: bold;
+    }
+
+    /* Callout & Alerts */
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+      padding: 14px 18px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 18px 0;
+      font-size: 13.5px;
+    }
+
+    .callout.amber {
+      border-left-color: var(--amber);
+      background: #fffbeb;
+    }
+
+    .callout.cyan {
+      border-left-color: var(--secondary);
+      background: #ecfeff;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      border: 1px solid var(--slate-200);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--slate-100);
+      font-weight: 700;
+      color: var(--slate-800);
+    }
+
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-patient {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-physician {
+      background: #cffafe;
+      color: #155e75;
+      border: 1px solid #a5f3fc;
+    }
+
+    .badge-elder {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-ai {
+      background: #ede9fe;
+      color: #5b21b6;
+      border: 1px solid #ddd6fe;
+    }
+
+    /* Step Flow Boxes */
+    .workflow-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 14px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-title {
+      font-weight: bold;
+      color: var(--slate-800);
+      margin-bottom: 3px;
+    }
+
+    /* Keyboard shortcut tags */
+    kbd {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-size: 12px;
+      box-shadow: 0 1px 0 #94a3b8;
+    }
+
+    .footer {
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--slate-200);
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Cover Header -->
+  <div class="header-cover">
+    <div class="eyebrow">
+      <span>●</span> Official System Reference & User Manual
+    </div>
+    <h1 class="title">AyuCase Platform: Complete User Manual</h1>
+    <div class="subtitle">
+      Comprehensive guide explaining each portal, interactive feature, AI-powered diagnostic engine, clinical workflow, and accessibility module.
+    </div>
+    <div class="meta-bar">
+      <div><strong>Platform:</strong> AyuCase (React 19, TypeScript, Three.js, Vite)</div>
+      <div><strong>Version:</strong> Phase 0 & Phase 2 Foundation</div>
+      <div><strong>Local Server:</strong> http://localhost:5173/</div>
+      <div><strong>Target Audience:</strong> Patients, Caregivers, Clinicians & Administrators</div>
+    </div>
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="toc-card no-break">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <div class="toc-item"><span>1. System Architecture & Concepts</span><span>Page 2</span></div>
+      <div class="toc-item"><span>2. Frequently Asked Doubts (FAQ)</span><span>Page 3</span></div>
+      <div class="toc-item"><span>3. Public Portal & Landing Page</span><span>Page 4</span></div>
+      <div class="toc-item"><span>4. Patient Experience Portal</span><span>Page 5</span></div>
+      <div class="toc-item"><span>5. AI Pre-Interview Voice Pipeline</span><span>Page 7</span></div>
+      <div class="toc-item"><span>6. Elder-Friendly Mode</span><span>Page 8</span></div>
+      <div class="toc-item"><span>7. Physician Clinical Workstation</span><span>Page 9</span></div>
+      <div class="toc-item"><span>8. Contradiction Radar Engine</span><span>Page 11</span></div>
+      <div class="toc-item"><span>9. Diagnostic Intelligence</span><span>Page 12</span></div>
+      <div class="toc-item"><span>10. Free 24/7 Cloud Deployment</span><span>Page 13</span></div>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="no-break">
+    <h2 class="section-title">1. System Architecture & Core Concepts</h2>
+    <p>
+      <strong>AyuCase</strong> is an <em>AI-Synthesized Patient Narrative Architecture</em>. It is designed to bridge the communication gap between patients and clinicians by transforming unstructured natural patient speech, documents, and medical milestones into clean, structured clinical intelligence.
+    </p>
+
+    <div class="callout cyan">
+      <div class="callout-title">Key Architectural Pillars</div>
+      <ul style="margin: 0; padding-left: 18px;">
+        <li><strong>Dual-Sided Unified Portals:</strong> Seamless split between the <em>Patient Experience</em> and the <em>Physician Clinical Workstation</em>.</li>
+        <li><strong>Zero-Knowledge Demo Sandbox:</strong> All patient data operates purely in browser local memory (LocalStorage) with synthetic demonstration personas (Aarav Chen & Dr. Vance). No external biometric or national ID servers are accessed.</li>
+        <li><strong>Interactive 3D Biological Visualization:</strong> Utilizes <code>Three.js</code> and <code>@react-three/fiber</code> to render high-fidelity anatomical models and symptom hot-spots.</li>
+        <li><strong>Multilingual Speech & Narrative:</strong> First-class support for 6 Indian Languages (English, Hindi, Tamil, Telugu, Kannada, Bengali).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="page-break"></div>
+  <div>
+    <h2 class="section-title">2. Answers to Your Doubts (Essential User Questions)</h2>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Doubt 1: Why does the Chrome shortcut close when the IDE closes?</span>
+        <span class="badge badge-ai">Core Knowledge</span>
+      </div>
+      <p>
+        <strong>Why it happens:</strong> The link <code>http://localhost:5173</code> points to a server running inside your computer's RAM. In developer mode, that server was started by your Antigravity IDE session. When you close the IDE, Windows terminates that process. Thus, Chrome cannot connect to a server that has been shut down.
+      </p>
+      <p><strong>Two Permanent Solutions:</strong></p>
+      <ul>
+        <li>
+          <strong>Solution A (One-Click Offline Desktop Launcher):</strong> We have created a dedicated launcher file in your project folder named <code>start-ayucase.bat</code>. Whenever you want to use the website without opening Antigravity IDE, simply <strong>double-click <code>start-ayucase.bat</code></strong>. It automatically boots the web server in 2 seconds and opens your Chrome browser to <code>http://localhost:5173/</code>!
+        </li>
+        <li>
+          <strong>Solution B (Permanent 24/7 Cloud Website):</strong> You can deploy the website to free high-speed hosting (like <strong>Vercel</strong> or <strong>Netlify</strong>) with 1 click. This gives you a live permanent web address (e.g., <code>https://ayucase.vercel.app</code>) that works on any phone, tablet, or laptop 24 hours a day, 365 days a year, even when your PC is completely turned off! (See Section 10).
+        </li>
+      </ul>
+    </div>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Doubt 2: How do I proceed with making small/minor changes to the site?</span>
+        <span class="badge badge-patient">Pair Programming</span>
+      </div>
+      <p>
+        You don't have to write any complex code yourself! You can simply tell me in the chat whatever you want changed.
+      </p>
+      <p><strong>Recommended Procedure to Request Changes:</strong></p>
+      <div class="workflow-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">Specify the Page Name</div>
+          <p style="margin:0; font-size:13px;">Tell me which page you are looking at (e.g., <em>Landing Page</em>, <em>Patient Interview</em>, <em>Physician Radar</em>, or <em>Elder Mode</em>).</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">List Your Desired Changes</div>
+          <p style="margin:0; font-size:13px;">Give bullet points of what to adjust: button text, colors, layouts, adding fields, removing sections, or changing sample patient names.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">Instant Hot-Reload Validation</div>
+          <p style="margin:0; font-size:13px;">Because the Vite dev server uses Hot Module Replacement (HMR), the changes appear in your browser within milliseconds without losing your page state!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="page-break"></div>
+  <div>
+    <h2 class="section-title">3. Public Portal & Landing Page Navigation</h2>
+    <p>
+      The Landing Page serves as the primary entrance gateway for both patients and healthcare providers.
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Hero Section & Interactive 3D Canvas</span>
+        <span class="feature-route">Route: /</span>
+      </div>
+      <p>
+        Features a real-time WebGL biological helical mesh that dynamically rotates and reacts to mouse movements.
+      </p>
+      <ul>
+        <li><strong>Patient Portal Card:</strong> Green-accented interactive card. Clicking routes directly to Patient Login/Registration.</li>
+        <li><strong>Physician Workstation Card:</strong> Cyan-accented interactive card. Routes to Clinical Workstation Login.</li>
+        <li><strong>1-Click Demo Jump Buttons:</strong>
+          <ul>
+            <li><code>Demo Patient (Aarav Chen)</code>: Immediately logs in the synthetic patient profile and opens the Language Selector.</li>
+            <li><code>Demo Physician (Dr. Vance)</code>: Immediately logs in the demo specialist and opens the Physician Clinical Workstation.</li>
+          </ul>
+        </li>
+        <li><strong>Telemetry Micro-Pills:</strong> Shows real-time indicators for 0ms local latency, 6 Indian languages, and Elder High-Contrast mode availability.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div>
+    <h2 class="section-title">4. Patient Experience Portal: Deep-Dive</h2>
+    <p>
+      Designed to make medical history collection frictionless, accessible for non-technical individuals, and respectful of patient privacy.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Page / Feature</th>
+          <th>URL Route</th>
+          <th>What You Can Do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Language Selection</strong></td>
+          <td><code>/patient/language</code></td>
+          <td>Select from English, Hindi, Tamil, Telugu, Kannada, Bengali with audio dialect previews.</td>
+        </tr>
+        <tr>
+          <td><strong>Patient Dashboard</strong></td>
+          <td><code>/patient/dashboard</code></td>
+          <td>Central hub displaying active medical conditions, vitals badges, recent prescriptions, next clinical visit, and quick action cards.</td>
+        </tr>
+        <tr>
+          <td><strong>AI Clinical Interview</strong></td>
+          <td><code>/patient/interview</code></td>
+          <td>Interactive guided questionnaire with voice recording, waveform audio feedback, real-time clinical entity extraction, and summary generation.</td>
+        </tr>
+        <tr>
+          <td><strong>Patient Story</strong></td>
+          <td><code>/patient/story</code></td>
+          <td>Translates dense clinical EHR notes into an easy-to-read chronological personal health narrative.</td>
+        </tr>
+        <tr>
+          <td><strong>Smart Health Documents</strong></td>
+          <td><code>/patient/documents</code></td>
+          <td>Upload lab reports, discharge summaries, and prescriptions with simulated OCR tag classification and category filtering.</td>
+        </tr>
+        <tr>
+          <td><strong>Health Journey Timeline</strong></td>
+          <td><code>/patient/timeline</code></td>
+          <td>Visual milestone tracker mapping diagnoses, procedures, and medication adjustments across time.</td>
+        </tr>
+        <tr>
+          <td><strong>Care Capsule</strong></td>
+          <td><code>/patient/capsule</code></td>
+          <td>Portable emergency health card with QR code, blood group, drug allergies, emergency contacts, and one-click printable export.</td>
+        </tr>
+        <tr>
+          <td><strong>Elder-Friendly Mode</strong></td>
+          <td><code>/patient/elder</code></td>
+          <td>High-contrast, large-button layout designed specifically for seniors and visually impaired individuals.</td>
+        </tr>
+        <tr>
+          <td><strong>Consent & Privacy Vault</strong></td>
+          <td><code>/patient/consent</code></td>
+          <td>Granular consent toggles to permit or revoke physician access to specific records (e.g. lab tests, genetics, psychological notes).</td>
+        </tr>
+        <tr>
+          <td><strong>Patient Profile</strong></td>
+          <td><code>/patient/profile</code></td>
+          <td>Manage patient demographics, primary emergency contacts, and insurance carrier identifiers.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="page-break"></div>
+  <div>
+    <h2 class="section-title">5. AI Pre-Interview Voice Pipeline (Key Feature)</h2>
+    <p>
+      The pre-interview module replaces intimidating medical intake paperwork with an intelligent conversational experience.
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Real-Time Voice-to-Structure Processing</span>
+        <span class="badge badge-ai">Patent-Grade Architecture</span>
+      </div>
+      <p>The interface guides the user through 5 standard clinical intake questions:</p>
+      <ol>
+        <li><strong>Chief Complaint:</strong> Primary symptom or reason for visit (e.g. throbbing unilateral headache).</li>
+        <li><strong>Onset & Duration:</strong> When the symptoms started and how long episodes persist.</li>
+        <li><strong>Aggravating / Relieving Factors:</strong> Trigger factors such as bright light, stress, or caffeine.</li>
+        <li><strong>Current Medications & Supplements:</strong> Active prescription or OTC intake.</li>
+        <li><strong>Associated Symptoms:</strong> Nausea, visual disturbances, or dizziness.</li>
+      </ol>
+
+      <div class="callout">
+        <div class="callout-title">Interactive Elements on this Screen:</div>
+        <ul>
+          <li><kbd>Mic Button</kbd>: Simulates live audio capture with dynamic audio waveform bars.</li>
+          <li><kbd>Type with Keyboard</kbd>: Toggle switch to allow manual text typing instead of voice.</li>
+          <li><kbd>Audio Read-Aloud</kbd>: Uses browser speech synthesis to read the question aloud in the patient's language.</li>
+          <li><strong>Entity Extraction Pill:</strong> As the patient answers, the system automatically parses and displays:
+            <em>Clinical Field</em>, <em>Standardized Value</em>, <em>Confidence Score (e.g. 97%)</em>, and <em>Clinical Classification Tags</em>.
+          </li>
+          <li><kbd>Generate Pre-Visit Summary</kbd>: Opens a modal presenting a formatted physician handoff summary.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div>
+    <h2 class="section-title">6. Elder-Friendly Mode (Senior Care Module)</h2>
+    <p>
+      Accessed via <code>/patient/elder</code> or the accessibility switcher in the top navigation bar.
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Specialized Senior Interface Tools</span>
+        <span class="badge badge-elder">Accessibility</span>
+      </div>
+      <ul>
+        <li><strong>"I'm Feeling OK Today" Instant Check-In:</strong> A large, reassuring emerald button allowing seniors to confirm their daily wellness with a single tap, notifying linked family members.</li>
+        <li><strong>Medication Reminder Board:</strong> Visually organized pill cards segregated into <em>Morning</em>, <em>Afternoon</em>, and <em>Night</em> with clear checkbox toggles.</li>
+        <li><strong>Guided Doctor Visit Assistant:</strong> Provides a simplified 3-step checklist of what questions to ask the doctor during their upcoming visit.</li>
+        <li><strong>Family Caregiver Link:</strong> View emergency contact shortcuts and family assistant status without navigating complex menus.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="page-break"></div>
+  <div>
+    <h2 class="section-title">7. Physician Clinical Workstation: Deep-Dive</h2>
+    <p>
+      The Physician Portal (<code>/physician</code>) is an advanced decision-support terminal designed to cut clinical chart review time by up to 70%.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Workstation Module</th>
+          <th>URL Route</th>
+          <th>Clinical Decision Capability</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Clinical Dashboard</strong></td>
+          <td><code>/physician/dashboard</code></td>
+          <td>Triage queue displaying active patients with risk scores (High, Moderate, Low), unread lab alerts, and pending chart sign-offs.</td>
+        </tr>
+        <tr>
+          <td><strong>Patient Roster</strong></td>
+          <td><code>/physician/patients</code></td>
+          <td>Searchable directory of all registered patients with acuity filters, primary diagnosis tags, and last visit dates.</td>
+        </tr>
+        <tr>
+          <td><strong>Case Investigation</strong></td>
+          <td><code>/physician/case/:id</code></td>
+          <td>Comprehensive single-patient cockpit featuring the <strong>3D Anatomical Mesh</strong>, lab trends, vital charts, and diagnostic notes.</td>
+        </tr>
+        <tr>
+          <td><strong>Contradiction Radar</strong></td>
+          <td><code>/physician/contradictions</code></td>
+          <td>Real-time anomaly detector highlighting contradictory symptoms, medication conflicts, and anomalous lab readings.</td>
+        </tr>
+        <tr>
+          <td><strong>Diagnostic Intelligence</strong></td>
+          <td><code>/physician/intelligence</code></td>
+          <td>Differential diagnosis engine calculating probability percentages, supporting evidence citations, and suggested next tests.</td>
+        </tr>
+        <tr>
+          <td><strong>Clinical Timeline</strong></td>
+          <td><code>/physician/timeline</code></td>
+          <td>Longitudinal multi-track event visualizer correlating medication changes with symptom spikes.</td>
+        </tr>
+        <tr>
+          <td><strong>Documents & Lab Explorer</strong></td>
+          <td><code>/physician/documents</code></td>
+          <td>Parsed lab findings, radiology reports, and discharge summaries with search and tag filters.</td>
+        </tr>
+        <tr>
+          <td><strong>Workstation Settings</strong></td>
+          <td><code>/physician/settings</code></td>
+          <td>Adjust AI alert sensitivity, toggle high-contrast clinical dark mode, and manage EHR sync preferences.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 8 -->
+  <div>
+    <h2 class="section-title">8. Contradiction Radar Engine (Safety & Anomaly Detection)</h2>
+    <p>
+      One of AyuCase's signature clinical innovations is the <strong>Contradiction Radar</strong> (<code>/physician/contradictions</code>). It continuously scans patient intake answers against their existing medical records to detect dangerous discrepancies.
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Sample Detected Discrepancies</span>
+        <span class="badge badge-physician">Clinical Safety</span>
+      </div>
+      <ol>
+        <li>
+          <strong>Medication Conflict (Ergotamine vs Triptans):</strong>
+          Alerts the doctor if a patient reports taking an over-the-counter migraine remedy that interacts with a prescribed abortive medication.
+        </li>
+        <li>
+          <strong>Vitals vs Symptom Disconnect:</strong>
+          Flags situations where patient reports feeling severe palpitations, but recorded ECG telemetry and resting heart rate indicate 68 bpm (sinus rhythm).
+        </li>
+        <li>
+          <strong>Allergy & Penicillin Anomaly:</strong>
+          Flags if past discharge documents list "No Known Allergies" while recent intake answers mention hives after Amoxicillin.
+        </li>
+      </ol>
+
+      <div class="callout amber">
+        <div class="callout-title">Physician Action Stances:</div>
+        Doctors can click <strong>"Accept / Clarify with Patient"</strong>, <strong>"Mark as False Positive"</strong>, or <strong>"Override & Document"</strong>. Every action is recorded in the permanent audit trail.
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 9 -->
+  <div class="page-break"></div>
+  <div>
+    <h2 class="section-title">9. Diagnostic Intelligence Engine</h2>
+    <p>
+      Located at <code>/physician/intelligence</code>, this page presents an evidence-based differential diagnosis matrix for active clinical cases.
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Differential Hypotheses Matrix</span>
+        <span class="badge badge-ai">Evidence Engine</span>
+      </div>
+      <p>For the sample patient (Aarav Chen), the engine synthesizes:</p>
+      <ul>
+        <li><strong>Primary Hypothesis: Migraine with Typical Aura (Confidence: 89%)</strong>
+          <br><span style="font-size:12.5px; color:#64748b;">Supporting Factors: Unilateral throbbing, scintillating scotoma, photophobia, normal neurological exam.</span>
+        </li>
+        <li><strong>Differential 2: Cluster Headache (Confidence: 34%)</strong>
+          <br><span style="font-size:12.5px; color:#64748b;">Contradicting Factors: Pain duration exceeds typical 3-hour cluster attack window; absence of conjunctival injection.</span>
+        </li>
+        <li><strong>Differential 3: Secondary Intracranial Pathology (Confidence: 6%)</strong>
+          <br><span style="font-size:12.5px; color:#64748b;">Ruled out based on absence of papilledema and negative red-flag symptoms.</span>
+        </li>
+      </ul>
+      <p style="margin-top: 10px;">
+        <strong>Recommended Next Steps:</strong> Provides the doctor with concrete suggestions such as ordering a non-contrast brain MRI or prescribing sumatriptan 50mg with follow-up in 14 days.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 10 -->
+  <div>
+    <h2 class="section-title">10. How to Make AyuCase a Full-Time 24/7 Live Website</h2>
+    <p>
+      Currently, AyuCase runs on your computer at <code>http://localhost:5173/</code>. To make it a permanent website accessible anywhere in the world 24/7 (even when your PC is turned off), follow these simple steps:
+    </p>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Option 1: Deploy to Vercel (100% Free, Recommended)</span>
+        <span class="badge badge-patient">1 Minute Setup</span>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">Open Terminal in AyuCase Directory</div>
+          <p style="margin:0; font-size:13px;">In your project folder, run: <code>npx vercel</code></p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">Follow the 3 Prompts</div>
+          <p style="margin:0; font-size:13px;">Press <kbd>Enter</kbd> to accept default settings. Vercel automatically detects Vite + React.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">Instant Live URL</div>
+          <p style="margin:0; font-size:13px;">You will get an address like <code>https://ayucase.vercel.app</code>. You can bookmark this on your phone, tablet, and PC!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card no-break">
+      <div class="feature-header">
+        <span class="feature-name">Option 2: Deploy to Netlify</span>
+        <span class="badge badge-physician">Drag & Drop or CLI</span>
+      </div>
+      <p style="margin-bottom: 6px;">Run <code>npm.cmd run build</code> to create the <code>dist</code> folder, then run <code>npx netlify deploy --prod</code> and select the <code>dist</code> directory. Your site goes live immediately with free SSL!</p>
+    </div>
+  </div>
+
+  <!-- Summary Footer -->
+  <div class="footer no-break">
+    <p>© 2026 AyuCase Clinical Technologies. All Rights Reserved.</p>
+    <p>This manual covers all functionalities present in AyuCase Phase 0 & Phase 2 Foundation.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
