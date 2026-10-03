@@ -8,18 +8,20 @@ import {
   Clock,
   BookOpen,
   UserCheck,
-  ShieldAlert,
+  ShieldCheck,
   Users,
   BriefcaseMedical,
   Sparkles,
   Settings,
-  Globe2,
   HeartPulse,
   Radio,
   Package,
   Sliders,
   X,
   Activity,
+  Layers,
+  HelpCircle,
+  ExternalLink,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useLanguage } from '../../contexts/LanguageContext'
@@ -31,11 +33,15 @@ export interface SidebarProps {
   onClose?: () => void
 }
 
-interface NavItem {
-  to: string
-  label: string
-  icon: React.ComponentType<{ className?: string }>
-  badge?: string
+interface NavGroup {
+  groupLabel?: string
+  items: {
+    to: string
+    label: string
+    icon: React.ComponentType<{ className?: string }>
+    badge?: string
+    badgeVariant?: 'emerald' | 'cyan' | 'amber' | 'indigo' | 'rose'
+  }[]
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
@@ -47,125 +53,193 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && onClose) {
+          onClose()
+        }
+      }
+      window.addEventListener('keydown', handleKeyDown)
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown)
+        document.body.style.overflow = ''
+      }
     } else {
       document.body.style.overflow = ''
     }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
+  }, [isOpen, onClose])
 
-  const patientLinks: NavItem[] = [
-    ...(isElderMode
-      ? [{ to: '/patient/elder', label: 'Elder Home (Dedicated)', icon: HeartPulse, badge: 'Active' }]
-      : [{ to: '/patient/elder', label: 'Elder Mode Experience', icon: HeartPulse }]),
-    { to: '/patient/dashboard', label: t('nav.dashboard'), icon: LayoutDashboard },
-    { to: '/patient/interview', label: t('nav.interview'), icon: MessageSquareText },
-    { to: '/patient/documents', label: t('nav.documents'), icon: FileText },
-    { to: '/patient/timeline', label: t('nav.timeline'), icon: Clock },
-    { to: '/patient/story', label: t('nav.story'), icon: BookOpen },
-    { to: '/patient/profile', label: t('nav.profile'), icon: UserCheck },
-    { to: '/patient/consent', label: t('nav.consent'), icon: ShieldAlert },
-    { to: '/patient/capsule', label: 'Care Capsule', icon: Package, badge: 'Demo' },
-    { to: '/patient/language', label: 'Language & Mode', icon: Globe2 },
+  const patientGroups: NavGroup[] = [
+    {
+      groupLabel: 'Care Overview',
+      items: [
+        { to: '/patient/dashboard', label: t('nav.dashboard', 'Overview'), icon: LayoutDashboard },
+        { to: '/patient/story', label: t('nav.story', 'My Health Story'), icon: BookOpen },
+        { to: '/patient/timeline', label: t('nav.timeline', 'Health Timeline'), icon: Clock },
+        { to: '/patient/interview', label: t('nav.interview', 'Clinical Interview'), icon: MessageSquareText },
+        { to: '/patient/documents', label: t('nav.documents', 'Documents'), icon: FileText },
+        { to: '/patient/capsule', label: 'Care Capsule', icon: Package, badge: 'Dossier', badgeVariant: 'emerald' },
+      ],
+    },
+    {
+      groupLabel: 'Support & Family',
+      items: [
+        { to: '/patient/timeline?filter=family', label: 'Family Health', icon: Users },
+        {
+          to: '/patient/elder',
+          label: 'Elder Support',
+          icon: HeartPulse,
+          badge: isElderMode ? 'Active' : undefined,
+          badgeVariant: 'amber',
+        },
+      ],
+    },
+    {
+      groupLabel: 'Account & Autonomy',
+      items: [
+        { to: '/patient/consent', label: t('nav.consent', 'Consent & Privacy'), icon: ShieldCheck },
+        { to: '/patient/profile', label: t('nav.profile', 'Patient Profile'), icon: UserCheck },
+      ],
+    },
   ]
 
-  const physicianLinks: NavItem[] = [
-    { to: '/physician/dashboard', label: t('nav.physician.dashboard'), icon: LayoutDashboard },
-    { to: '/physician/patients', label: t('nav.physician.patients'), icon: Users },
-    { to: '/physician/case/CS-1082', label: t('nav.physician.case'), icon: BriefcaseMedical, badge: 'High' },
-    { to: '/physician/timeline', label: t('nav.physician.timeline'), icon: Clock },
-    { to: '/physician/documents', label: t('nav.physician.documents'), icon: FileText },
-    { to: '/physician/intelligence', label: t('nav.physician.intelligence'), icon: Sparkles, badge: 'AI' },
-    { to: '/physician/contradictions', label: 'Contradiction Radar', icon: Radio, badge: '3' },
-    { to: '/physician/settings', label: t('nav.physician.settings'), icon: Settings },
+  const physicianGroups: NavGroup[] = [
+    {
+      groupLabel: 'Clinical Practice',
+      items: [
+        { to: '/physician/dashboard', label: t('nav.physician.dashboard', 'Dashboard'), icon: LayoutDashboard },
+        { to: '/physician/patients', label: t('nav.physician.patients', 'Patients'), icon: Users },
+        { to: '/physician/case/CS-1082', label: t('nav.physician.case', 'Clinical Cases'), icon: BriefcaseMedical, badge: 'Active', badgeVariant: 'cyan' },
+        { to: '/physician/timeline', label: t('nav.physician.timeline', 'Timeline'), icon: Clock },
+        { to: '/physician/documents', label: t('nav.physician.documents', 'Documents'), icon: FileText },
+      ],
+    },
+    {
+      groupLabel: 'Clinical Intelligence',
+      items: [
+        { to: '/physician/intelligence', label: t('nav.physician.intelligence', 'Intelligence Suite'), icon: Sparkles, badge: 'Insights', badgeVariant: 'indigo' },
+        { to: '/physician/contradictions', label: 'Contradiction Radar', icon: Radio, badge: '3 Gaps', badgeVariant: 'amber' },
+      ],
+    },
+    {
+      groupLabel: 'Preferences',
+      items: [
+        { to: '/physician/settings', label: t('nav.physician.settings', 'Settings & Protocols'), icon: Settings },
+      ],
+    },
   ]
 
-  const navLinks = role === 'physician' ? physicianLinks : patientLinks
+  const navGroups = role === 'physician' ? physicianGroups : patientGroups
+
+  const renderBadge = (badge?: string, variant?: 'emerald' | 'cyan' | 'amber' | 'indigo' | 'rose') => {
+    if (!badge) return null
+    const colorStyles = {
+      emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+      cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-800',
+      amber: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+      indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-800',
+      rose: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+    }[variant || 'emerald']
+
+    return (
+      <span className={cn('text-[11px] font-semibold px-2 py-0.5 rounded-md border shrink-0', colorStyles)}>
+        {badge}
+      </span>
+    )
+  }
 
   const sidebarContent = (
-    <div className="flex flex-col h-full justify-between p-4">
-      {/* Top: Section Header & Nav Items */}
-      <div>
-        <div className="px-3 py-2 mb-3">
-          <div className="flex items-center gap-2">
-            <HeartPulse className="w-4 h-4 text-emerald-500" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              {role === 'physician' ? 'Clinical Navigation' : 'Patient Journey'}
+    <div className="flex flex-col h-full justify-between p-4 overflow-y-auto">
+      {/* Top: Section Header & Nav Groups */}
+      <div className="space-y-6">
+        {/* User Identity Context Bar */}
+        <div className="px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/70 dark:border-slate-800/80">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              {role === 'physician' ? 'Clinical Workstation' : 'Patient Health Space'}
             </span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="System Operational" />
           </div>
           {user && (
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 truncate">
-              {user.name} ({user.fictionalIdentifier})
-            </p>
+            <div className="mt-1.5 min-w-0">
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                {user.name}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                ID: {user.fictionalIdentifier}
+              </p>
+            </div>
           )}
         </div>
 
-        <nav className="space-y-1.5" aria-label="Sidebar navigation">
-          {navLinks.map((link) => {
-            const Icon = link.icon
-            return (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                onClick={onClose}
-                className={({ isActive }) =>
-                  cn(
-                    'flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all',
-                    isElderMode && 'min-h-[52px] text-base font-bold',
-                    isActive
-                      ? role === 'physician'
-                        ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-sm shadow-cyan-600/25 border border-cyan-500/30 font-semibold'
-                        : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm shadow-emerald-600/20 border border-emerald-500/30 font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#0c152e] hover:text-slate-900 dark:hover:text-slate-100'
-                  )
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={cn('w-5 h-5 shrink-0', isElderMode && 'w-6 h-6')} />
-                  <span>{link.label}</span>
+        {/* Grouped Navigation */}
+        <nav className="space-y-5" aria-label="Sidebar navigation">
+          {navGroups.map((group, groupIdx) => (
+            <div key={groupIdx} className="space-y-1">
+              {group.groupLabel && (
+                <div className="px-3 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  {group.groupLabel}
                 </div>
-                {link.badge && (
-                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-white/20 text-current uppercase">
-                    {link.badge}
-                  </span>
-                )}
-              </NavLink>
-            )
-          })}
+              )}
+              {group.items.map((link) => {
+                const Icon = link.icon
+                return (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      cn(
+                        'group relative flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all select-none',
+                        isElderMode && 'min-h-[50px] text-base font-bold',
+                        isActive
+                          ? 'bg-emerald-50/80 text-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-300 font-semibold'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-100'
+                      )
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {/* Subtle left accent bar */}
+                        {isActive && (
+                          <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-md bg-emerald-600 dark:bg-emerald-400" />
+                        )}
 
-          {/* Universal Accessibility Controls Trigger */}
-          <button
-            type="button"
-            onClick={() => {
-              openA11yModal()
-              if (onClose) onClose()
-            }}
-            className={cn(
-              'w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 cursor-pointer text-left',
-              isElderMode && 'min-h-[52px] text-base font-bold'
-            )}
-            aria-label="Open Accessibility Controls (Alt + A)"
-          >
-            <div className="flex items-center gap-3">
-              <Sliders className={cn('w-5 h-5 shrink-0 text-cyan-500', isElderMode && 'w-6 h-6')} />
-              <span>{t('a11y.openA11y', 'Accessibility')}</span>
+                        <div className="flex items-center gap-3 min-w-0 flex-1 pl-1">
+                          <Icon
+                            className={cn(
+                              'w-4.5 h-4.5 shrink-0 transition-colors',
+                              isActive
+                                ? 'text-emerald-600 dark:text-emerald-400'
+                                : 'text-slate-400 group-hover:text-slate-600 dark:text-slate-500 dark:group-hover:text-slate-300'
+                            )}
+                          />
+                          <span className="truncate">{link.label}</span>
+                        </div>
+
+                        {renderBadge(link.badge, link.badgeVariant)}
+                      </>
+                    )}
+                  </NavLink>
+                )
+              })}
             </div>
-            <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
-              Alt+A
-            </span>
-          </button>
+          ))}
         </nav>
       </div>
 
-      {/* Bottom: Demo Notice Card */}
-      <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-slate-800/80">
-        <div className="p-3 rounded-xl bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/50 text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-          <p className="font-semibold text-slate-700 dark:text-slate-300 mb-1">
-            Fictional Healthcare Sandbox
-          </p>
-          <p>Local state only. No actual Aadhaar or medical records stored.</p>
-        </div>
+      {/* Bottom: Quick Preferences & A11y Shortcut */}
+      <div className="pt-4 mt-6 border-t border-slate-200/80 dark:border-slate-800/80 space-y-2">
+        <button
+          type="button"
+          onClick={openA11yModal}
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <Sliders className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+            <span className="font-medium">Accessibility Controls</span>
+          </div>
+          <span className="text-[11px] text-slate-400 font-mono">Alt+A</span>
+        </button>
       </div>
     </div>
   )
@@ -173,58 +247,64 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
   return (
     <>
       {/* Desktop Persistent Sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-slate-200/80 dark:border-slate-800/80 glass-card min-h-[calc(100vh-65px)]">
+      <aside
+        className={cn(
+          'hidden lg:block w-64 shrink-0 h-[calc(100vh-65px)] sticky top-[65px]',
+          'bg-white/95 dark:bg-[#070d1e]/95 backdrop-blur-md',
+          'border-r border-slate-200/80 dark:border-slate-800/80 z-20'
+        )}
+      >
         {sidebarContent}
       </aside>
 
-      {/* Mobile Drawer with Animated Backdrop & Slide-over */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {isOpen && (
-          <div className="lg:hidden fixed inset-0 z-50 flex">
+          <div className="fixed inset-0 z-50 lg:hidden flex">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm"
               onClick={onClose}
+              className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs cursor-pointer"
               aria-hidden="true"
             />
 
-            {/* Slide-out Drawer */}
-            <motion.aside
+            {/* Slide-out Drawer Panel */}
+            <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="relative w-80 max-w-[85vw] h-full bg-white dark:bg-slate-900 z-50 shadow-2xl flex flex-col justify-between overflow-y-auto border-r border-slate-200 dark:border-slate-800"
+              transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+              className="relative w-72 max-w-[85vw] h-full bg-white dark:bg-[#070d1e] border-r border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col z-10"
             >
-              {/* Drawer Top Header with Close Button */}
-              <div className="flex items-center justify-between p-4 border-b border-slate-200/80 dark:border-slate-800/80">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-sm">
+              {/* Drawer Header */}
+              <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-white">
                     <Activity className="w-4 h-4" />
                   </div>
-                  <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-slate-100">
-                    AyuCase
+                  <span className="font-bold text-base text-slate-900 dark:text-slate-100">
+                    AYUCASE
                   </span>
                 </div>
-
                 <button
                   type="button"
                   onClick={onClose}
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Close navigation menu"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  aria-label="Close navigation"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
+              {/* Drawer Content */}
               <div className="flex-1 overflow-y-auto">
                 {sidebarContent}
               </div>
-            </motion.aside>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>

@@ -90,7 +90,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentSpokenText, setCurrentSpokenText] = useState<string | null>(null)
   const [liveAnnouncement, setLiveAnnouncement] = useState<string>('')
   const [isA11yModalOpen, setIsA11yModalOpen] = useState(false)
-  const [simpleViewEnabled, setSimpleViewEnabled] = useState<boolean>(true)
+  const [simpleViewEnabled, setSimpleViewEnabled] = useState<boolean>(() => {
+    try {
+      const savedMode = localStorage.getItem(MODE_STORAGE_KEY) as AppMode | null
+      return savedMode === 'elder'
+    } catch {
+      return false
+    }
+  })
 
   const isElderMode = settings.mode === 'elder'
 
@@ -237,6 +244,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
           mode: 'standard',
         }
       })
+      setSimpleViewEnabled(newMode === 'elder')
       announceToScreenReader(
         newMode === 'elder'
           ? 'Switched to Elder Mode. High contrast, large text, and voice assistance activated.'

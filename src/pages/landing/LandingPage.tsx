@@ -10,211 +10,304 @@ import {
   Eye,
   CheckCircle2,
   Lock,
+  MessageSquareText,
+  FileText,
+  Clock,
+  Radio,
+  Package,
+  Layers,
+  ChevronRight,
+  Check,
 } from 'lucide-react'
-import { GlassCard } from '../../components/ui/GlassCard'
-import { AnimatedButton } from '../../components/ui/AnimatedButton'
+import { AyuCard, AyuCardHeader, AyuCardContent } from '../../components/ui/AyuCard'
+import { AyuButton } from '../../components/ui/AyuButton'
+import { AyuBadge } from '../../components/ui/AyuBadge'
 import { MedicalVisual3D } from '../../components/canvas/MedicalVisual3D'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotifications } from '../../contexts/NotificationContext'
 
 export const LandingPage: React.FC = () => {
-  const { t, language } = useLanguage()
+  const { t } = useLanguage()
   const { loginAsPatient, loginAsPhysician } = useAuth()
   const { notifySuccess } = useNotifications()
   const navigate = useNavigate()
 
   const handleQuickPatient = async () => {
     await loginAsPatient('demo-pt-1')
-    notifySuccess('Demo Patient Signed In', 'Navigating to language selection.')
+    notifySuccess('Welcome, Aarav Chen', 'Navigating to language selection.')
     navigate('/patient/language')
   }
 
   const handleQuickPhysician = async () => {
     await loginAsPhysician('demo-md-1')
-    notifySuccess('Demo Physician Signed In', 'Navigating to clinical workstation.')
+    notifySuccess('Welcome, Dr. Vance', 'Clinical workstation active.')
     navigate('/physician/dashboard')
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-70px)] flex flex-col justify-between py-6 sm:py-12 px-4 sm:px-6 max-w-7xl mx-auto cinematic-backdrop">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-emerald-500/10 via-cyan-500/10 to-indigo-500/5 blur-3xl pointer-events-none rounded-full" />
-
+    <div className="relative min-h-[calc(100vh-70px)] py-8 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto space-y-20 sm:space-y-28">
       {/* Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
           className="lg:col-span-7 space-y-6"
         >
           {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/25 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-semibold shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-            <span>AI-Synthesized Patient Narrative Architecture</span>
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Patient-Centered Clinical Intelligence</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-slate-100 tracking-tight leading-[1.12]">
-            {t('landing.title')}
+            Your health record, <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">
+              understood as a whole.
+            </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-            {t('landing.subtitle')}
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+            A calm, patient-centered health intelligence platform that connects your lived health story, medical documents, chronological timeline, and clinical review into one coherent picture.
           </p>
 
-          {/* Dual Portal Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
-            {/* Patient Portal Card */}
-            <GlassCard
-              variant="interactive"
-              glow="emerald"
-              onClick={() => navigate('/patient/login')}
-              className="p-5 flex flex-col justify-between group border border-slate-200/90 dark:border-slate-800"
+          {/* Primary Action Buttons */}
+          <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+            <AyuButton
+              to="/patient/login"
+              variant="primary"
+              size="lg"
+              leftIcon={<HeartPulse className="w-5 h-5" />}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 group-hover:scale-105 transition-transform shadow-sm">
-                  <HeartPulse className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">
-                  {t('landing.patientPortal')}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
-                  {t('landing.patientDesc')}
-                </p>
-              </div>
+              Patient Portal
+            </AyuButton>
 
-              <div className="flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 pt-2 border-t border-slate-200/60 dark:border-slate-800">
-                <span>Enter as Patient</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </GlassCard>
-
-            {/* Physician Portal Card */}
-            <GlassCard
-              variant="interactive"
-              glow="cyan"
-              onClick={() => navigate('/physician/login')}
-              className="p-5 flex flex-col justify-between group border border-slate-200/90 dark:border-slate-800"
+            <AyuButton
+              to="/physician/login"
+              variant="secondary"
+              size="lg"
+              leftIcon={<Stethoscope className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
             >
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-cyan-400 mb-4 group-hover:scale-105 transition-transform shadow-sm">
-                  <Stethoscope className="w-6 h-6" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">
-                  {t('landing.physicianPortal')}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
-                  {t('landing.physicianDesc')}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between text-xs font-bold text-teal-600 dark:text-cyan-400 pt-2 border-t border-slate-200/60 dark:border-slate-800">
-                <span>Enter Workstation</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </GlassCard>
+              Physician Workstation
+            </AyuButton>
           </div>
 
-          {/* Quick Demo Launchers */}
-          <div className="pt-2 flex flex-wrap items-center gap-3">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              1-Click Demo Jump:
+          {/* 1-Click Interactive Demo Jumps */}
+          <div className="pt-4 flex flex-wrap items-center gap-2.5">
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
+              Explore Demo:
             </span>
-            <AnimatedButton
-              variant="secondary"
-              size="sm"
+            <button
+              type="button"
               onClick={handleQuickPatient}
-              leftIcon={<HeartPulse className="w-3.5 h-3.5 text-emerald-500" />}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >
-              Demo Patient (Aarav Chen)
-            </AnimatedButton>
-            <AnimatedButton
-              variant="secondary"
-              size="sm"
+              <HeartPulse className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Patient (Aarav Chen)</span>
+            </button>
+            <button
+              type="button"
               onClick={handleQuickPhysician}
-              leftIcon={<Stethoscope className="w-3.5 h-3.5 text-cyan-500" />}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
             >
-              Demo Physician (Dr. Vance)
-            </AnimatedButton>
-          </div>
-
-          {/* Telemetry Micro-Pills */}
-          <div className="pt-3 flex flex-wrap items-center gap-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
-            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              0ms Local Latency
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-              6 Indian Languages
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-              Elder High-Contrast Mode
-            </span>
+              <Stethoscope className="w-3.5 h-3.5 text-teal-500" />
+              <span>Physician (Dr. Vance)</span>
+            </button>
           </div>
         </motion.div>
 
-        {/* 3D Visual & Highlight Column */}
+        {/* 3D Visual Column - Supportive, Not Overpowering */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="lg:col-span-5 relative"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="lg:col-span-5"
         >
-          <GlassCard variant="elevated" className="p-6 relative overflow-hidden border border-slate-200/90 dark:border-slate-700/80 shadow-2xl">
-            {/* Ambient biological 3D canvas */}
-            <div className="h-64 sm:h-72 w-full relative">
+          <AyuCard variant="default" padding="sm" className="relative shadow-xl border border-slate-200/90 dark:border-slate-800">
+            <div className="h-64 sm:h-72 w-full relative rounded-xl overflow-hidden bg-slate-950">
               <MedicalVisual3D />
-              <div className="absolute bottom-2 left-2 right-2 p-3 rounded-xl bg-slate-900/85 backdrop-blur-md text-white border border-slate-700/70 text-xs flex items-center justify-between shadow-lg">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  Three.js 3D Helical Mesh Active
+              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-slate-900/90 backdrop-blur-md text-white border border-slate-700/70 text-xs flex items-center justify-between">
+                <span className="flex items-center gap-2 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  3D Anatomical Biomesh
                 </span>
-                <span className="text-[10px] text-slate-300 font-mono">Interactive WebGL</span>
+                <span className="text-[11px] text-slate-400 font-mono">Real-time Simulation</span>
               </div>
             </div>
 
-            {/* Feature highlights */}
-            <div className="mt-5 space-y-3">
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
-                <Eye className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <div className="text-xs">
-                  <span className="font-bold text-slate-900 dark:text-slate-100 block">
-                    Elder Mode Architecture
-                  </span>
-                  <span className="text-slate-500 dark:text-slate-400">
-                    High contrast, simplified touch zones, and read-aloud support for seniors.
-                  </span>
-                </div>
+            <div className="p-4 grid grid-cols-2 gap-3 text-xs">
+              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200/60 dark:border-slate-800">
+                <p className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5 text-amber-500" /> Elder Mode
+                </p>
+                <p className="text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">
+                  High contrast & voice assistance
+                </p>
               </div>
-
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
-                <Lock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-                <div className="text-xs">
-                  <span className="font-bold text-slate-900 dark:text-slate-100 block">
-                    Zero-Knowledge Sandbox
-                  </span>
-                  <span className="text-slate-500 dark:text-slate-400">
-                    Fictional demonstration data only. Real Aadhaar and ABHA credentials never requested.
-                  </span>
-                </div>
+              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200/60 dark:border-slate-800">
+                <p className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 text-emerald-500" /> Full Autonomy
+                </p>
+                <p className="text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">
+                  Granular patient consent
+                </p>
               </div>
             </div>
-          </GlassCard>
+          </AyuCard>
         </motion.div>
       </div>
 
-      {/* Bottom privacy footer notice */}
-      <div className="pt-8 border-t border-slate-200/80 dark:border-slate-800/80 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
-        <span>© 2026 AYUCASE Clinical Technologies — Phase 0 & Phase 2 Foundation</span>
-        <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
-          <Shield className="w-3.5 h-3.5" />
-          Fictional Demo Session Active (Browser LocalStorage)
-        </span>
-      </div>
+      {/* How AYUCASE Works Section */}
+      <section className="space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <AyuBadge variant="teal" size="md">Workflow Architecture</AyuBadge>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            How AYUCASE Works
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            A cohesive pipeline bridging patient recollection with empirical clinical documentation.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Step 1 */}
+          <AyuCard variant="default" padding="md" className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm">
+              01
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <MessageSquareText className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              Patient Voice & Story
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Patients describe symptoms in their own words via multilingual voice or guided interview questions, capturing real lived experiences.
+            </p>
+          </AyuCard>
+
+          {/* Step 2 */}
+          <AyuCard variant="default" padding="md" className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-sm">
+              02
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              Document Ingestion
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Reports, laboratory panels, prescriptions, and radiology scans are ingested, structured, and cross-referenced with full source traceability.
+            </p>
+          </AyuCard>
+
+          {/* Step 3 */}
+          <AyuCard variant="default" padding="md" className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800 flex items-center justify-center text-cyan-700 dark:text-cyan-400 font-bold text-sm">
+              03
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+              Chronological Timeline
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Disparate encounters are automatically merged into an interactive timeline that highlights missing history and clinical patterns.
+            </p>
+          </AyuCard>
+
+          {/* Step 4 */}
+          <AyuCard variant="default" padding="md" className="space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-700 dark:text-indigo-400 font-bold text-sm">
+              04
+            </div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <Radio className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              Clinical Synthesis
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Physicians access 3-panel clinical workstations with Contradiction Radars that detect differences between patient memories and lab metrics.
+            </p>
+          </AyuCard>
+        </div>
+      </section>
+
+      {/* Flagship Features Grid */}
+      <section className="space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <AyuBadge variant="emerald" size="md">Core Capabilities</AyuBadge>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Designed for Trust, Speed & Clarity
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <AyuCard variant="interactive" onClick={() => navigate('/patient/capsule')} className="p-6">
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mb-4">
+              <Package className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
+              AyuCase Care Capsule
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Export and share a structured, verifiable health dossier containing stories, labs, verified timelines, and clinical notes for second opinions.
+            </p>
+          </AyuCard>
+
+          <AyuCard variant="interactive" onClick={() => navigate('/physician/contradictions')} className="p-6">
+            <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center mb-4">
+              <Radio className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
+              Contradiction Radar
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Automated clinical gap detection surfaces variances between patient recollections and laboratory findings before misdiagnoses occur.
+            </p>
+          </AyuCard>
+
+          <AyuCard variant="interactive" onClick={() => navigate('/patient/consent')} className="p-6">
+            <div className="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 flex items-center justify-center mb-4">
+              <Shield className="w-5 h-5" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">
+              Consent Control Center
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Granular patient permissions for voice recordings, laboratory records, health timelines, and physician sharing with full revocability.
+            </p>
+          </AyuCard>
+        </div>
+      </section>
+
+      {/* Trust & Simulation Notice */}
+      <section className="p-6 sm:p-8 rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-center max-w-4xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+          <Lock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <span>Local Simulation & Data Privacy</span>
+        </div>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          Privacy-Safe Interactive Healthcare Sandbox
+        </h3>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+          AYUCASE operates in an audit-ready demo environment. All patient profiles, diagnostic findings, and clinical cases are simulated and persist safely in browser storage without external transmission.
+        </p>
+      </section>
+
+      {/* Footer */}
+      <footer className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <div>© 2026 AYUCASE Clinical Technologies • Dual-Portal Architecture</div>
+        <div className="flex items-center gap-4">
+          <Link to="/patient/login" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+            Patient Portal
+          </Link>
+          <Link to="/physician/login" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+            Physician Workstation
+          </Link>
+          <Link to="/patient/consent" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">
+            Consent & Privacy
+          </Link>
+        </div>
+      </footer>
     </div>
   )
 }

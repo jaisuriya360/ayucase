@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { cn } from '../../utils/cn'
 
 export interface PageHeaderProps {
@@ -33,9 +34,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               <React.Fragment key={idx}>
                 {idx > 0 && <span className="opacity-50">/</span>}
                 {crumb.href ? (
-                  <a href={crumb.href} className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  <Link to={crumb.href} className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors font-medium">
                     {crumb.label}
-                  </a>
+                  </Link>
                 ) : (
                   <span className="text-slate-700 dark:text-slate-300 font-medium">{crumb.label}</span>
                 )}

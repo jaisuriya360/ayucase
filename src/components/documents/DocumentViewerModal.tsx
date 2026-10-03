@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import type { MedicalDocument } from '../../types/document'
 import { Modal } from '../ui/Modal'
+import { ConfirmModal } from '../ui/ConfirmModal'
 import { AnimatedButton } from '../ui/AnimatedButton'
 import { cn } from '../../utils/cn'
 
@@ -44,6 +45,7 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
   const [activePage, setActivePage] = useState<number>(initialPage)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [newTitle, setNewTitle] = useState(document.name)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
   const metadata = document.extractedData
   const totalPages = document.pageCount || 2
@@ -323,13 +325,8 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
           {onRemove && (
             <button
               type="button"
-              onClick={() => {
-                if (window.confirm(`Are you sure you want to remove ${document.name}?`)) {
-                  onRemove(document.id)
-                  onClose()
-                }
-              }}
-              className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center gap-1.5 transition-colors"
+              onClick={() => setIsConfirmOpen(true)}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Remove Document</span>
@@ -341,6 +338,22 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
           </AnimatedButton>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false)
+          if (onRemove) {
+            onRemove(document.id)
+          }
+          onClose()
+        }}
+        title="Delete document?"
+        description={`"${document.name}" will be removed from this demo patient record.`}
+        confirmText="Delete document"
+        variant="danger"
+      />
     </Modal>
   )
 }

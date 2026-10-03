@@ -295,11 +295,6 @@ html.reduced-motion .animate-fadeIn {
   animation: none !important;
 }
 
-/* Neutralize 3D movement, perspective, and rotational tilts */
-html[data-reduced-motion="true"] .hero .framework,
-html[data-reduced-motion="true"] .hero .vite,
-html.reduced-motion .hero .framework,
-html.reduced-motion .hero .vite,
 html[data-reduced-motion="true"] [style*="perspective"],
 html.reduced-motion [style*="perspective"],
 html[data-reduced-motion="true"] [style*="rotateX"],

@@ -317,10 +317,11 @@ export const DocumentDropzone: React.FC<DocumentDropzoneProps> = ({
           Upload prescriptions, lab reports, imaging scans, or discharge summaries (Up to 25 MB).
         </p>
 
-        <div className="flex items-center gap-2 mt-4 text-[10px] text-slate-400 font-mono">
+        <div className="flex items-center gap-2 mt-4 text-[11px] text-slate-500 dark:text-slate-400 font-mono flex-wrap justify-center">
           <span className="px-2 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800">PDF</span>
-          <span className="px-2 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800">JPG</span>
           <span className="px-2 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800">PNG</span>
+          <span className="px-2 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800">CSV</span>
+          <span className="px-2 py-0.5 rounded bg-slate-200/60 dark:bg-slate-800">DICOM</span>
         </div>
       </div>
 

@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import {
   HeartPulse,
-  UserCheck,
-  ShieldCheck,
   ArrowRight,
-  Info,
-  CheckCircle2,
-  Sparkles,
+  Check,
+  Shield,
+  User,
 } from 'lucide-react'
-import { GlassCard } from '../../components/ui/GlassCard'
-import { AnimatedButton } from '../../components/ui/AnimatedButton'
+import { AyuCard } from '../../components/ui/AyuCard'
+import { AyuButton } from '../../components/ui/AyuButton'
+import { AyuBadge } from '../../components/ui/AyuBadge'
 import { DEMO_PATIENT_PROFILES } from '../../data/mockProfiles'
 import { useAuth } from '../../contexts/AuthContext'
 import { useLanguage } from '../../contexts/LanguageContext'
@@ -23,50 +21,37 @@ export const PatientLoginPage: React.FC = () => {
   const { t } = useLanguage()
   const { notifySuccess } = useNotifications()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [selectedProfileId, setSelectedProfileId] = useState<string>('demo-pt-1')
-  const [customId, setCustomId] = useState<string>('')
 
   const handleLogin = async (profileId: string) => {
     const user = await loginAsPatient(profileId)
-    notifySuccess(`Welcome, ${user.name}!`, 'Demo patient session started.')
-    // As instructed by Phase 2: After patient login -> Language Selection
-    navigate('/patient/language')
-  }
-
-  const handleCustomLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const user = await loginAsPatient(selectedProfileId)
-    notifySuccess(`Welcome, ${user.name}!`, 'Demo session verified.')
-    navigate('/patient/language')
+    notifySuccess(`Welcome back, ${user.name}`, 'Session established.')
+    const destination = (location.state as any)?.from?.pathname || '/patient/dashboard'
+    navigate(destination)
   }
 
   return (
-    <div className="w-full">
-      <GlassCard variant="elevated" className="p-6 sm:p-8">
+    <div className="w-full max-w-xl mx-auto py-4">
+      <AyuCard variant="default" padding="lg" className="shadow-xl border border-slate-200/90 dark:border-slate-800">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-3 shadow-md shadow-emerald-500/10">
-            <HeartPulse className="w-7 h-7" />
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto mb-3 shadow-xs">
+            <HeartPulse className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
-            {t('auth.patient.title')}
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Welcome back
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
-            {t('auth.patient.subtitle')}
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+            Access your AYUCASE personal health space.
           </p>
-
-          {/* Privacy reassurance pill */}
-          <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[11px] font-medium text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Fictional Sandbox — Zero Real Aadhaar/ABHA Data Requested</span>
-          </div>
         </div>
 
-        {/* Quick Demo Profiles Grid */}
+        {/* Profile Selection */}
         <div className="space-y-4">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
-            {t('auth.patient.quickSelect')}
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
+            Select Patient Profile
           </label>
 
           <div className="space-y-2.5">
@@ -77,10 +62,10 @@ export const PatientLoginPage: React.FC = () => {
                   key={profile.id}
                   onClick={() => setSelectedProfileId(profile.id)}
                   className={cn(
-                    'p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3',
+                    'p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3',
                     isSelected
-                      ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-500 shadow-sm'
-                      : 'bg-white/60 dark:bg-slate-900/60 border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                      ? 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-500/80 shadow-xs ring-1 ring-emerald-500/40'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                   )}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -97,12 +82,9 @@ export const PatientLoginPage: React.FC = () => {
                         <span className="font-bold text-sm text-slate-900 dark:text-slate-100">
                           {profile.name}
                         </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono font-medium">
-                          {profile.fictionalIdentifier}
-                        </span>
                         {profile.age && (
-                          <span className="text-xs text-slate-400">
-                            ({profile.age}y, {profile.gender})
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            • {profile.age}y, {profile.gender}
                           </span>
                         )}
                       </div>
@@ -113,18 +95,18 @@ export const PatientLoginPage: React.FC = () => {
                   </div>
 
                   <div className="shrink-0 flex items-center gap-2">
-                    <span className="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span className="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                       {profile.badgeText}
                     </span>
                     <div
                       className={cn(
-                        'w-5 h-5 rounded-full border flex items-center justify-center',
+                        'w-5 h-5 rounded-full border flex items-center justify-center transition-colors',
                         isSelected
                           ? 'border-emerald-500 bg-emerald-500 text-white'
                           : 'border-slate-300 dark:border-slate-600'
                       )}
                     >
-                      {isSelected && <CheckCircle2 className="w-4 h-4" />}
+                      {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
                   </div>
                 </div>
@@ -132,18 +114,18 @@ export const PatientLoginPage: React.FC = () => {
             })}
           </div>
 
-          {/* Action button */}
-          <div className="pt-4">
-            <AnimatedButton
+          {/* Primary Action Button */}
+          <div className="pt-3">
+            <AyuButton
               variant="primary"
               size="lg"
-              className="w-full text-base font-bold shadow-lg shadow-emerald-500/20"
+              className="w-full text-base font-semibold"
               isLoading={isLoading}
               onClick={() => handleLogin(selectedProfileId)}
-              rightIcon={<ArrowRight className="w-5 h-5" />}
+              rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              {t('auth.patient.loginBtn')}
-            </AnimatedButton>
+              Continue to Health Space
+            </AyuButton>
           </div>
         </div>
 
@@ -152,22 +134,22 @@ export const PatientLoginPage: React.FC = () => {
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-slate-200 dark:border-slate-800" />
           </div>
-          <span className="relative px-3 bg-white dark:bg-slate-900 text-xs text-slate-400 font-medium">
-            Demo Registration
+          <span className="relative px-3 bg-white dark:bg-[#0b1428] text-xs text-slate-400">
+            or
           </span>
         </div>
 
-        {/* Register footer */}
-        <div className="text-center text-xs text-slate-500 dark:text-slate-400">
-          <span>{t('auth.patient.noAccount')} </span>
+        {/* Register Footer */}
+        <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+          <span>New to AYUCASE? </span>
           <Link
             to="/patient/register"
-            className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+            className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
           >
-            {t('auth.patient.registerLink')}
+            Create patient profile
           </Link>
         </div>
-      </GlassCard>
+      </AyuCard>
     </div>
   )
 }
