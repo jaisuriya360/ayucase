@@ -70,8 +70,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
   const portalLabel = role === 'physician' ? 'Clinical Workstation' : 'Patient Portal'
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#070d1e]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 py-2.5">
-      <div className="flex items-center justify-between gap-3 max-w-7xl mx-auto">
+    <header className="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#070d1e]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-3 sm:px-6 py-2 sm:py-2.5">
+      <div className="flex items-center justify-between gap-1.5 sm:gap-3 max-w-7xl mx-auto">
         {/* Left: Mobile Sidebar Trigger + Logo + Portal Identity */}
         <div className="flex items-center gap-3 min-w-0">
           {onToggleSidebar && (
@@ -95,22 +95,6 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
               </span>
             </div>
           </Link>
-
-          {/* Top Left Navigation: About Us & Contact Us */}
-          <nav className="flex items-center gap-1 sm:gap-2 pl-2 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
-            <a
-              href="/#about"
-              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors"
-            >
-              About Us
-            </a>
-            <a
-              href="/#contact"
-              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors"
-            >
-              Contact Us
-            </a>
-          </nav>
         </div>
 
         {/* Center: Discreet Demo Environment Indicator (Discreet & Calm) */}
@@ -119,8 +103,24 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
           <span>Demo Environment • Simulated Clinical Sandbox</span>
         </div>
 
-        {/* Right: Controls & Preferences */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Right: Navigation (About Us, Contact Us) & Controls */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* Top Right Navigation: About Us & Contact Us */}
+          <nav className="flex items-center gap-0.5 sm:gap-1 mr-0.5 sm:mr-1">
+            <a
+              href="/#about"
+              className="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+            >
+              About Us
+            </a>
+            <a
+              href="/#contact"
+              className="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+            >
+              Contact Us
+            </a>
+          </nav>
+
           {/* ACCESSIBILITY MODAL SHORTCUT */}
           <button
             type="button"
@@ -303,16 +303,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
                 </div>
               )}
             </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <AyuButton to="/patient/login" variant="ghost" size="sm">
-                Patient Portal
-              </AyuButton>
-              <AyuButton to="/physician/login" variant="primary" size="sm">
-                Physician Portal
-              </AyuButton>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     </header>

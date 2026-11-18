@@ -31,7 +31,7 @@ import {
 import { AyuCard, AyuCardHeader, AyuCardContent } from '../../components/ui/AyuCard'
 import { AyuButton } from '../../components/ui/AyuButton'
 import { AyuBadge } from '../../components/ui/AyuBadge'
-import { HeartbeatPulseVisual } from '../../components/canvas/HeartbeatPulseVisual'
+import heroHudImg from '../../assets/clinical-hud-hero.jpg'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotifications } from '../../contexts/NotificationContext'
@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-70px)] py-8 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto space-y-20 sm:space-y-28">
+    <div className="relative min-h-[calc(100vh-70px)] py-6 sm:py-12 md:py-16 px-3.5 sm:px-6 max-w-7xl mx-auto space-y-16 sm:space-y-24">
       {/* Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative">
         <motion.div
@@ -112,28 +112,39 @@ export const LandingPage: React.FC = () => {
             A calm, patient-centered health intelligence platform that connects your lived health story, medical documents, chronological timeline, and clinical review into one coherent picture.
           </p>
 
-          {/* Primary Action Links: About Us & Contact Us */}
+          {/* Main Action Buttons: Patient & Physician Portal Logins */}
           <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-            <a
-              href="#about"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-600/20 hover:shadow-lg hover:shadow-emerald-600/30 transition-all cursor-pointer"
+            <Link
+              to="/patient/login"
+              className="group relative flex items-center justify-between sm:justify-start gap-4 px-6 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:shadow-emerald-600/30 transition-all duration-200 cursor-pointer border border-emerald-400/30 overflow-hidden w-full sm:w-auto"
             >
-              <Users className="w-4.5 h-4.5" />
-              <span>About Us</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">
+                <HeartPulse className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="text-left">
+                <div className="text-[11px] font-semibold text-emerald-100 uppercase tracking-wider">For Patients & Families</div>
+                <div className="text-base font-extrabold tracking-tight">Patient Portal Login</div>
+              </div>
+              <ArrowRight className="w-5 h-5 ml-auto text-emerald-100 group-hover:translate-x-1 transition-transform" />
+            </Link>
 
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200/90 dark:bg-slate-800 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
+            <Link
+              to="/physician/login"
+              className="group relative flex items-center justify-between sm:justify-start gap-4 px-6 py-4 rounded-2xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border border-slate-200/90 dark:border-slate-700/80 overflow-hidden w-full sm:w-auto"
             >
-              <Mail className="w-4.5 h-4.5 text-teal-600 dark:text-teal-400" />
-              <span>Contact Us</span>
-            </a>
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 dark:bg-teal-400/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+                <Stethoscope className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="text-left">
+                <div className="text-[11px] font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider">For Doctors & Clinics</div>
+                <div className="text-base font-extrabold tracking-tight">Physician Portal Login</div>
+              </div>
+              <ArrowRight className="w-5 h-5 ml-auto text-slate-400 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
           {/* 1-Click Interactive Demo Jumps */}
-          <div className="pt-4 flex flex-wrap items-center gap-2.5">
+          <div className="pt-2 flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
               Explore Demo:
             </span>
@@ -156,22 +167,29 @@ export const LandingPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Clinical Biosignal Pulse Waveform Visual */}
+        {/* Clinical Workspace HUD Graphic - Static & Fully Responsive */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="lg:col-span-5"
+          className="lg:col-span-5 w-full"
         >
-          <AyuCard variant="default" padding="sm" className="relative shadow-xl border border-slate-200/90 dark:border-slate-800">
-            <div className="h-64 sm:h-72 w-full relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-950/40">
-              <HeartbeatPulseVisual />
+          <AyuCard variant="default" padding="sm" className="relative shadow-2xl border border-slate-200/90 dark:border-slate-800 overflow-hidden">
+            <div className="relative w-full rounded-xl overflow-hidden bg-slate-950 aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10]">
+              <img
+                src={heroHudImg}
+                alt="AyuCase Patient Profile and Health Intelligence Tablet"
+                className="w-full h-full object-cover object-center"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/20 pointer-events-none" />
+              
               <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-slate-900/90 backdrop-blur-md text-white border border-slate-700/70 text-xs flex items-center justify-between z-10 shadow-lg">
                 <span className="flex items-center gap-2 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Continuous Biosignal Pulse
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  Clinical Intelligence Workspace
                 </span>
-                <span className="text-[11px] text-emerald-400 font-mono font-medium">Normal Sinus Rhythm</span>
+                <span className="text-[11px] text-emerald-400 font-mono font-medium">Aarav Chen • Live Dossier</span>
               </div>
             </div>
 
