@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -18,11 +18,20 @@ import {
   Layers,
   ChevronRight,
   Check,
+  Users,
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  HeartHandshake,
+  Target,
+  ShieldCheck,
+  Info,
 } from 'lucide-react'
 import { AyuCard, AyuCardHeader, AyuCardContent } from '../../components/ui/AyuCard'
 import { AyuButton } from '../../components/ui/AyuButton'
 import { AyuBadge } from '../../components/ui/AyuBadge'
-import { MedicalVisual3D } from '../../components/canvas/MedicalVisual3D'
+import { HeartbeatPulseVisual } from '../../components/canvas/HeartbeatPulseVisual'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotifications } from '../../contexts/NotificationContext'
@@ -32,6 +41,36 @@ export const LandingPage: React.FC = () => {
   const { loginAsPatient, loginAsPhysician } = useAuth()
   const { notifySuccess } = useNotifications()
   const navigate = useNavigate()
+
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    role: 'Patient / Caregiver',
+    subject: '',
+    message: '',
+  })
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false)
+  const [contactSubmitted, setContactSubmitted] = useState(false)
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmittingContact(true)
+    setTimeout(() => {
+      setIsSubmittingContact(false)
+      setContactSubmitted(true)
+      notifySuccess(
+        'Message Received',
+        `Thank you ${contactForm.name || 'for reaching out'}. Our clinical informatics team will respond to ${contactForm.email} within 24 hours.`
+      )
+      setContactForm({
+        name: '',
+        email: '',
+        role: 'Patient / Caregiver',
+        subject: '',
+        message: '',
+      })
+    }, 700)
+  }
 
   const handleQuickPatient = async () => {
     await loginAsPatient('demo-pt-1')
@@ -73,26 +112,24 @@ export const LandingPage: React.FC = () => {
             A calm, patient-centered health intelligence platform that connects your lived health story, medical documents, chronological timeline, and clinical review into one coherent picture.
           </p>
 
-          {/* Primary Action Buttons */}
+          {/* Primary Action Links: About Us & Contact Us */}
           <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-            <AyuButton
-              to="/patient/login"
-              variant="primary"
-              size="lg"
-              leftIcon={<HeartPulse className="w-5 h-5" />}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
+            <a
+              href="#about"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-600/20 hover:shadow-lg hover:shadow-emerald-600/30 transition-all cursor-pointer"
             >
-              Patient Portal
-            </AyuButton>
+              <Users className="w-4.5 h-4.5" />
+              <span>About Us</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
 
-            <AyuButton
-              to="/physician/login"
-              variant="secondary"
-              size="lg"
-              leftIcon={<Stethoscope className="w-5 h-5 text-teal-600 dark:text-teal-400" />}
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm bg-slate-100 hover:bg-slate-200/90 dark:bg-slate-800 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
             >
-              Physician Workstation
-            </AyuButton>
+              <Mail className="w-4.5 h-4.5 text-teal-600 dark:text-teal-400" />
+              <span>Contact Us</span>
+            </a>
           </div>
 
           {/* 1-Click Interactive Demo Jumps */}
@@ -119,7 +156,7 @@ export const LandingPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* 3D Visual Column - Supportive, Not Overpowering */}
+        {/* Clinical Biosignal Pulse Waveform Visual */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -127,14 +164,14 @@ export const LandingPage: React.FC = () => {
           className="lg:col-span-5"
         >
           <AyuCard variant="default" padding="sm" className="relative shadow-xl border border-slate-200/90 dark:border-slate-800">
-            <div className="h-64 sm:h-72 w-full relative rounded-xl overflow-hidden bg-slate-950">
-              <MedicalVisual3D />
-              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-slate-900/90 backdrop-blur-md text-white border border-slate-700/70 text-xs flex items-center justify-between">
+            <div className="h-64 sm:h-72 w-full relative rounded-xl overflow-hidden bg-slate-950 border border-emerald-950/40">
+              <HeartbeatPulseVisual />
+              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-slate-900/90 backdrop-blur-md text-white border border-slate-700/70 text-xs flex items-center justify-between z-10 shadow-lg">
                 <span className="flex items-center gap-2 font-medium">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  3D Anatomical Biomesh
+                  Continuous Biosignal Pulse
                 </span>
-                <span className="text-[11px] text-slate-400 font-mono">Real-time Simulation</span>
+                <span className="text-[11px] text-emerald-400 font-mono font-medium">Normal Sinus Rhythm</span>
               </div>
             </div>
 
@@ -279,6 +316,282 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* About Us Section */}
+      <section id="about" className="space-y-10 pt-6 scroll-mt-24">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <AyuBadge variant="emerald" size="md">About AYUCASE</AyuBadge>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Bridging the Divide Between Lived Health Stories & Clinical Records
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+            Modern healthcare collects vast amounts of diagnostic data, yet patients often struggle to have their whole lived story heard. AyuCase brings peace of mind to patients and precision to clinicians by uniting subjective lived experiences, voice narratives, laboratory telemetry, and longitudinal timelines into one clear, cohesive clinical picture.
+          </p>
+        </div>
+
+        {/* 3 Core Pillars */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <AyuCard variant="default" padding="lg" className="space-y-4 border border-slate-200/80 dark:border-slate-800">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <HeartHandshake className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Patient-Led Health Preservation
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              We empower patients to share symptom progressions in their authentic voice, preserving vital nuances—such as daily functional impact and lifestyle triggers—that standard medical forms overlook.
+            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4" /> Multilingual Guided Voice & Text
+            </div>
+          </AyuCard>
+
+          <AyuCard variant="default" padding="lg" className="space-y-4 border border-slate-200/80 dark:border-slate-800">
+            <div className="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+              <Target className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Contradiction-Free Precision
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Our clinical informatics engine correlates self-reported symptoms with objective laboratory panels, Holter ECGs, and imaging findings, highlighting variances to prevent diagnostic delay and blind spots.
+            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4" /> 3-Panel Physician Diagnostic Radar
+            </div>
+          </AyuCard>
+
+          <AyuCard variant="default" padding="lg" className="space-y-4 border border-slate-200/80 dark:border-slate-800">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Universal Dignity & Sovereignty
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Equipped with high-contrast Elder Mode, tactile screen-reader acoustics, and revocable granular consent, AyuCase ensures health equity for every age, ability, and cultural background.
+            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4" /> Zero-Knowledge Consent Controls
+            </div>
+          </AyuCard>
+        </div>
+
+        {/* Impact Numbers */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800">
+          <div className="text-center space-y-1">
+            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">94%</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Faster Case Prep Time</div>
+          </div>
+          <div className="text-center space-y-1">
+            <div className="text-2xl sm:text-3xl font-extrabold text-teal-600 dark:text-teal-400">100%</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Client-Side Data Privacy</div>
+          </div>
+          <div className="text-center space-y-1">
+            <div className="text-2xl sm:text-3xl font-extrabold text-cyan-600 dark:text-cyan-400">6+</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Integrated Global Languages</div>
+          </div>
+          <div className="text-center space-y-1">
+            <div className="text-2xl sm:text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">0 ms</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Third-Party Tracking Leaks</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Us Section */}
+      <section id="contact" className="space-y-10 pt-6 scroll-mt-24">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <AyuBadge variant="teal" size="md">Direct Communication</AyuBadge>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Contact Our Clinical & Support Team
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+            Whether you have questions about using AyuCase, clinical deployment in your practice, or partnership opportunities, we are here to support you.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Contact Information & Channels */}
+          <div className="lg:col-span-5 space-y-4">
+            <AyuCard variant="default" padding="lg" className="space-y-6 border border-slate-200/80 dark:border-slate-800">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-emerald-500" />
+                  Get in Touch
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Our clinical informatics and technical staff typically respond within 24 business hours.
+                </p>
+              </div>
+
+              <div className="space-y-4 text-xs sm:text-sm">
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                  <Mail className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">Electronic Mail</div>
+                    <a href="mailto:support@ayucase.health" className="text-emerald-600 dark:text-emerald-400 hover:underline">
+                      support@ayucase.health
+                    </a>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Clinical Partnerships: <a href="mailto:clinical@ayucase.health" className="underline">clinical@ayucase.health</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                  <Phone className="w-5 h-5 text-teal-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">Toll-Free Patient & Clinic Desk</div>
+                    <div className="text-slate-700 dark:text-slate-300 font-mono">+1 (800) 555-AYUC (2982)</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Monday – Friday: 8:00 AM – 8:00 PM EST
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+                  <MapPin className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">Health Informatics Center</div>
+                    <div className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
+                      AyuCase Clinical Technologies Lab<br />
+                      Biomedical Innovation Hub • Boston & San Francisco
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+                <span className="font-bold flex items-center gap-1.5">
+                  <Shield className="w-4 h-4 text-amber-500 shrink-0" />
+                  Emergency Medical Notice:
+                </span>
+                <p className="text-[11px] leading-relaxed">
+                  AyuCase provides clinical health intelligence and timeline synthesis. If you are experiencing a life-threatening medical emergency, please call 911 or visit the nearest emergency room immediately.
+                </p>
+              </div>
+            </AyuCard>
+          </div>
+
+          {/* Interactive Form */}
+          <div className="lg:col-span-7">
+            <AyuCard variant="default" padding="lg" className="space-y-5 border border-slate-200/80 dark:border-slate-800">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                  Send a Direct Message
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Fill out the form below and our team will get back to you with guidance or clinical sandbox access details.
+                </p>
+              </div>
+
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Your Full Name <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                      placeholder="e.g. Dr. Eleanor Vance or Aarav Chen"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Email Address <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                      placeholder="you@domain.com"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      I Am Inquiring As
+                    </label>
+                    <select
+                      value={contactForm.role}
+                      onChange={(e) => setContactForm({ ...contactForm, role: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    >
+                      <option value="Patient / Caregiver">Patient / Family Caregiver</option>
+                      <option value="Physician / Clinician">Physician / Clinician</option>
+                      <option value="Hospital / Health System">Hospital / Health System</option>
+                      <option value="Researcher / Academic">Research / Academic Partner</option>
+                      <option value="Accessibility Inquirer">Accessibility Feedback</option>
+                      <option value="Other">Other Inquiry</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      value={contactForm.subject}
+                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                      placeholder="e.g. Clinical Workstation Integration"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Your Message <span className="text-rose-500">*</span>
+                  </label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                    placeholder="Tell us about your case, clinic workflow requirements, or questions..."
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-y"
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Your contact details remain strictly confidential.</span>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmittingContact}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isSubmittingContact ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Transmitting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </AyuCard>
+          </div>
+        </div>
+      </section>
+
       {/* Trust & Simulation Notice */}
       <section className="p-6 sm:p-8 rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-center max-w-4xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
@@ -297,6 +610,12 @@ export const LandingPage: React.FC = () => {
       <footer className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
         <div>© 2026 AYUCASE Clinical Technologies • Dual-Portal Architecture</div>
         <div className="flex items-center gap-4">
+          <a href="#about" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+            About Us
+          </a>
+          <a href="#contact" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+            Contact Us
+          </a>
           <Link to="/patient/login" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
             Patient Portal
           </Link>

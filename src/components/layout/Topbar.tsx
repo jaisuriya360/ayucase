@@ -96,18 +96,21 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
             </div>
           </Link>
 
-          {/* Portal Identity Badge */}
-          {user && (
-            <div className="hidden sm:flex items-center pl-3 border-l border-slate-200 dark:border-slate-800">
-              <AyuBadge
-                variant={role === 'physician' ? 'cyan' : 'emerald'}
-                size="md"
-                dot
-              >
-                {portalLabel}
-              </AyuBadge>
-            </div>
-          )}
+          {/* Top Left Navigation: About Us & Contact Us */}
+          <nav className="flex items-center gap-1 sm:gap-2 pl-2 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
+            <a
+              href="/#about"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors"
+            >
+              About Us
+            </a>
+            <a
+              href="/#contact"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors"
+            >
+              Contact Us
+            </a>
+          </nav>
         </div>
 
         {/* Center: Discreet Demo Environment Indicator (Discreet & Calm) */}
