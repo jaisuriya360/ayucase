@@ -13,6 +13,9 @@ import {
   User,
   Settings,
   HeartPulse,
+  Stethoscope,
+  Info,
+  Mail,
   Eye,
   Volume2,
   ShieldCheck,
@@ -42,6 +45,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
 
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const langMenuRef = useRef<HTMLDivElement>(null)
   const userMenuRef = useRef<HTMLDivElement>(null)
@@ -103,19 +107,19 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
           <span>Demo Environment • Simulated Clinical Sandbox</span>
         </div>
 
-        {/* Right: Navigation (About Us, Contact Us) & Controls */}
+        {/* Right: Navigation (Desktop) & Controls */}
         <div className="flex items-center gap-1 sm:gap-2">
-          {/* Top Right Navigation: About Us & Contact Us */}
-          <nav className="flex items-center gap-0.5 sm:gap-1 mr-0.5 sm:mr-1">
+          {/* Top Right Navigation: About Us & Contact Us (Desktop) */}
+          <nav className="hidden md:flex items-center gap-1 mr-1">
             <a
               href="/#about"
-              className="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+              className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
             >
               About Us
             </a>
             <a
               href="/#contact"
-              className="px-2 sm:px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+              className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
             >
               Contact Us
             </a>
@@ -304,8 +308,69 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, isSidebarOpen }
               )}
             </div>
           ) : null}
+
+          {/* MOBILE MENU TOGGLE BUTTON (md:hidden) */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden h-8 w-8 rounded-xl flex items-center justify-center text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800 transition-colors cursor-pointer shrink-0"
+            aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="w-4 h-4 text-emerald-500" /> : <Menu className="w-4 h-4" />}
+          </button>
         </div>
       </div>
+
+      {/* MOBILE EXPANDABLE MENU (md:hidden) */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden mt-2 pt-2.5 pb-1 border-t border-slate-200/80 dark:border-slate-800 max-w-7xl mx-auto space-y-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="grid grid-cols-2 gap-2">
+            <a
+              href="/#about"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-emerald-600 transition-colors"
+            >
+              <Info className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>About Us</span>
+            </a>
+            <a
+              href="/#contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-teal-600 transition-colors"
+            >
+              <Mail className="w-4 h-4 text-teal-500 shrink-0" />
+              <span>Contact Us</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/80">
+            <Link
+              to="/patient/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm text-xs font-bold"
+            >
+              <span className="flex items-center gap-2.5">
+                <HeartPulse className="w-4.5 h-4.5 text-white shrink-0" />
+                <span>Patient Portal Login</span>
+              </span>
+              <span className="text-[10px] text-emerald-100 uppercase tracking-wider font-mono">Enter →</span>
+            </Link>
+
+            <Link
+              to="/physician/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs font-bold"
+            >
+              <span className="flex items-center gap-2.5">
+                <Stethoscope className="w-4.5 h-4.5 text-teal-500 shrink-0" />
+                <span>Physician Portal Login</span>
+              </span>
+              <span className="text-[10px] text-teal-600 uppercase tracking-wider font-mono">Enter →</span>
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   )
 }
